@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventSphere - Exclusive Event Curation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: #F5F5F5;
+            color: #333333;
+            overflow-x: hidden;
+        }
+
+        /* Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: #FFFFFF;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .navbar .logo {
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1A1A1A;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333333;
+            font-size: 16px;
+            font-weight: 400;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a:focus {
+            color: #4A90E2;
+        }
+
+        .login-btn {
+            padding: 8px 16px;
+            background: #4A90E2;
+            color: #FFFFFF;
+            border-radius: 4px;
+            text-decoration: none;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            transition: background 0.3s ease;
+        }
+
+        .login-btn:hover, .login-btn:focus {
+            background: #357ABD;
+        }
+
+        /* Hero Section */
+        .hero {
+            height:100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+             background-image: url('back.png'); /* Path to your image */
+            background-size:cover; /* Makes image cover the whole section */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents repetition */
+            display: flex; /* For centering content */
+                }
+
+
+        .hero-content {
+            text-align: center;
+            max-width: 700px;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 60px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 20px;
+            text-shadow: #d1cfcf 2px 2px 4px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            color: #333333;
+             text-shadow: #d1cfcf 2px 2px 4px;
+            font-weight: 400;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            padding: 15px;
+            border: 1px solid #E0E0E0;
+            border-radius: 8px;
+            background: #FFFFFF;
+        }
+
+        .search-bar select, .search-bar button {
+            padding: 10px 16px;
+            border: 1px solid #E0E0E0;
+            border-radius: 4px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            background: #FFFFFF;
+            color: #333333;
+            cursor: pointer;
+        }
+
+        .search-bar button {
+            background: #4A90E2;
+            color: #FFFFFF;
+            border: none;
+            transition: background 0.3s ease;
+        }
+
+        .search-bar button:hover, .search-bar button:focus {
+            background: #357ABD;
+        }
+
+        /* Featured Events (Signature Events) */
+        .featured-events {
+            padding: 60px 40px;
+            background: #FFFFFF;
+            text-align: center;
+        }
+
+        .featured-events h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #1A1A1A;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .featured-card {
+            background: #FFFFFF;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #E0E0E0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .featured-card:hover, .featured-card:focus {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .featured-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .featured-card h3 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+            margin: 15px;
+            color: #1A1A1A;
+        }
+
+        .featured-card .event-details,
+        .featured-card .event-description {
+            font-size: 16px;
+            color: #333333;
+            margin: 0 15px 15px;
+        }
+
+        .featured-card .badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #4A90E2;
+            color: #FFFFFF;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .featured-card button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #4A90E2;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 0 0 8px 8px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            transition: background 0.3s ease;
+        }
+
+        .featured-card button:hover, .featured-card button:focus {
+            background: #357ABD;
+        }
+
+        /* Timeline Filter */
+        .timeline {
+            padding: 60px 40px;
+            background: #FFFFFF;
+            color: #333333;
+            position: -webkit-sticky;
+            top: 70px;
+            z-index: 900;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .timeline h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .timeline-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .timeline-controls select, .timeline-controls button {
+            padding: 10px 16px;
+            border: 1px solid #E0E0E0;
+            border-radius: 4px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            background: #FFFFFF;
+            color: #333333;
+            cursor: pointer;
+        }
+
+        .timeline-controls button.search-btn {
+            background: #4A90E2;
+            color: #FFFFFF;
+            border: none;
+            transition: background 0.3s ease;
+        }
+
+        .timeline-controls button.search-btn:hover, .timeline-controls button.search-btn:focus {
+            background: #357ABD;
+        }
+
+        /* Events Grid */
+        .events-grid {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .events-grid.active {
+            display: grid;
+        }
+
+        .event-card {
+            background: #FFFFFF;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #E0E0E0;
+            transition: background 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .event-card:hover, .event-card:focus {
+            background: #F0F0F0;
+        }
+
+        .event-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            loading: lazy;
+        }
+
+        .event-card h3 {
+            font-family: 'Roboto', sans-serif;
+            padding: 15px;
+            font-size: 20px;
+            color: #1A1A1A;
+        }
+
+        .event-card p {
+            padding: 0 15px 15px;
+            color: #333333;
+            font-size: 16px;
+        }
+
+        .event-card .badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #4A90E2;
+            color: #FFFFFF;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .event-card button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #4A90E2;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 0 0 8px 8px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            transition: background 0.3s ease;
+        }
+
+        .event-card button:hover, .event-card button:focus {
+            background: #357ABD;
+        }
+
+        /* Event Preview Overlay */
+        .event-preview {
+            display: none;
+            position: fixed;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background: #FFFFFF;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #E0E0E0;
+            z-index: 2000;
+        }
+
+        .event-preview h3 {
+            font-family: 'Roboto', sans-serif;
+            color: #1A1A1A;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .event-preview p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333333;
+        }
+
+        .event-preview button {
+            padding: 10px 20px;
+            background: #4A90E2;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            transition: background 0.3s ease;
+        }
+
+        .event-preview .close-preview {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333333;
+            transition: color 0.3s ease;
+        }
+
+        .event-preview .close-preview:hover, .event-preview .close-preview:focus {
+            color: #4A90E2;
+        }
+
+        /* Categories Spotlight */
+        .categories {
+            padding: 60px 40px;
+            background: #F5F5F5;
+            text-align: center;
+        }
+
+        .categories h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #1A1A1A;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .category-card {
+            background: #FFFFFF;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #E0E0E0;
+            transition: background 0.3s ease;
+        }
+
+        .category-card:hover, .category-card:focus {
+            background: #F0F0F0;
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #E0E0E0;
+        }
+
+        .category-card h3 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 20px;
+            margin: 15px 0;
+            color: #1A1A1A;
+        }
+
+        .category-card p {
+            font-size: 16px;
+            color: #333333;
+            margin-bottom: 15px;
+        }
+
+        .category-card .badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #4A90E2;
+            color: #FFFFFF;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .category-card button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #4A90E2;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 0 0 8px 8px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            transition: background 0.3s ease;
+        }
+
+        .category-card button:hover, .category-card button:focus {
+            background: #357ABD;
+        }
+
+        /* Testimonials Section (Voices of Elegance) */
+        .testimonials {
+            padding: 60px 40px;
+            background: #F5F5F5;
+            text-align: center;
+        }
+
+        .testimonials h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #1A1A1A;
+        }
+
+        .testimonial-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .testimonial-slide {
+            display: none;
+            opacity: 0;
+            background: #FFFFFF;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            color: #333333;
+            transition: opacity 0.5s ease;
+        }
+
+        .testimonial-slide.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .testimonial-slide p {
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-slide span {
+            font-weight: 700;
+            color: #1A1A1A;
+        }
+
+        .testimonial-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .testimonial-nav div {
+            width: 12px;
+            height: 12px;
+            background: #E0E0E0;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .testimonial-nav div.active {
+            background: #4A90E2;
+        }
+
+        /* Event Stats Counter */
+        .event-stats {
+            padding: 60px 40px;
+            background: #F5F5F5;
+            text-align: center;
+        }
+
+        .event-stats h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #1A1A1A;
+        }
+
+        .stats-counter {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+
+        .stats-counter div {
+            font-size: 28px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+            color: #1A1A1A;
+        }
+
+        /* Newsletter Signup */
+        .newsletter {
+            padding: 60px 40px;
+            background: #FFFFFF;
+            text-align: center;
+        }
+
+        .newsletter h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #1A1A1A;
+        }
+
+        .newsletter form {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter input {
+            padding: 10px 16px;
+            border: 1px solid #E0E0E0;
+            border-radius: 4px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            flex: 1;
+            background: #FFFFFF;
+            color: #333333;
+        }
+
+        .newsletter button {
+            padding: 10px 20px;
+            background: #4A90E2;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            transition: background 0.3s ease;
+        }
+
+        .newsletter button:hover, .newsletter button:focus {
+            background: #357ABD;
+        }
+
+        /* Login Modal */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .login-modal-content {
+            background: #FFFFFF;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid #E0E0E0;
+        }
+
+        .login-modal-content h2 {
+            font-family: 'Roboto', sans-serif;
+            color: #1A1A1A;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .login-modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #E0E0E0;
+            border-radius: 4px;
+            font-family: 'Roboto', sans-serif;
+            background: #FFFFFF;
+            color: #333333;
+            font-size: 16px;
+        }
+
+        .login-modal-content input:invalid {
+            border-color: #4A90E2;
+        }
+
+        .login-modal-content input:valid {
+            border-color: #4A90E2;
+        }
+
+        .login-modal-content button {
+            padding: 10px 20px;
+            background: #4A90E2;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            width: 100%;
+            transition: background 0.3s ease;
+        }
+
+        .login-modal-content .close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333333;
+            transition: color 0.3s ease;
+        }
+
+        .login-modal-content .close:hover, .login-modal-content .close:focus {
+            color: #4A90E2;
+        }
+
+        /* Add Event Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background: #FFFFFF;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            border: 1px solid #E0E0E0;
+        }
+
+        .modal-content h2 {
+            font-family: 'Roboto', sans-serif;
+            color: #1A1A1A;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .modal-content input, .modal-content select, .modal-content textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #E0E0E0;
+            border-radius: 4px;
+            font-family: 'Roboto', sans-serif;
+            background: #FFFFFF;
+            color: #333333;
+            font-size: 16px;
+        }
+
+        .modal-content input:invalid, .modal-content select:invalid {
+            border-color: #4A90E2;
+        }
+
+        .modal-content input:valid, .modal-content select:valid {
+            border-color: #4A90E2;
+        }
+
+        .modal-content button {
+            padding: 10px 20px;
+            background: #4A90E2;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            transition: background 0.3s ease;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333333;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover, .close:focus {
+            color: #4A90E2;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1A1A1A;
+            color: #FFFFFF;
+            padding: 60px 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .footer .company-info {
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+        }
+
+        .footer .quick-links a {
+            display: block;
+            color: #FFFFFF;
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            transition: color 0.3s ease;
+        }
+
+        .footer .quick-links a:hover, .footer .quick-links a:focus {
+            color: #4A90E2;
+        }
+
+        .footer .social-icons a {
+            color: #FFFFFF;
+            margin: 0 10px;
+            font-size: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-icons a:hover, .footer .social-icons a:focus {
+            color: #4A90E2;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero {
+                height: 70vh;
+            }
+
+            .hero-content {
+                padding: 0 20px;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .hero p {
+                font-size: 18px;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .timeline {
+                position: static;
+                padding: 40px 20px;
+            }
+
+            .timeline-controls {
+                flex-direction: column;
+            }
+
+            .events-grid {
+                grid-template-columns: 1fr;
+                padding: 40px 20px;
+            }
+
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-card img {
+                height: 200px;
+            }
+
+            .categories, .testimonials, .event-stats, .newsletter {
+                padding: 40px 20px;
+            }
+
+            .testimonial-slide {
+                padding: 20px;
+            }
+
+            .footer {
+                padding: 40px 20px;
+            }
+        }
+
+        /* Accessibility */
+        a:focus, button:focus, select:focus, input:focus {
+            outline: 2px solid #4A90E2;
+            outline-offset: 2px;
+        }
+
+        [role="region"] {
+            aria-live: "polite";
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .featured-card, .event-card, .category-card, .testimonial-slide {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="logo">EventSphere</div>
+        <div class="nav-links">
+            <a href="#home" aria-current="page">Home</a>
+            <a href="#events">Events</a>
+            <a href="#" class="open-modal">Add Event</a>
+            <a href="#contact">Contact</a>
+            <a href="#" class="open-login-modal login-btn">Login/Signup</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Curate Unforgettable Moments</h1>
+            <p>Discover exclusive events crafted for elegance</p>
+            <div class="search-bar">
+                <select id="city-search" aria-label="Select city">
+                    <option value="">Select City</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Bangalore">Bangalore</option>
+                </select>
+                <select id="category-search" aria-label="Select category">
+                    <option value="">Select Category</option>
+                    <option value="Music">Music</option>
+                    <option value="Comedy">Comedy</option>
+                    <option value="Festival">Festival</option>
+                </select>
+                <button class="explore-now-btn" aria-label="Explore events">Explore Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Events (Signature Events) -->
+    <section class="featured-events" id="featured-events">
+        <h2>Signature Events</h2>
+        <div class="featured-grid">
+            <div class="featured-card">
+                <span class="badge">🎵</span>
+                <img src="music1.jpg" alt="Elite Concert">
+                <h3>Elite Concert</h3>
+                <p class="event-details">Mumbai | ₹2800 | July 18, 2025</p>
+                <p class="event-description">A night of orchestral brilliance under the stars.</p>
+                <button>Reserve Now</button>
+            </div>
+            <div class="featured-card">
+                <span class="badge">😂</span>
+                <img src="c9.jpg" alt="Comedy Gala">
+                <h3>Comedy Gala</h3>
+                <p class="event-details">Delhi | ₹2000 | July 20, 2025</p>
+                <p class="event-description">Elite stand-up comedy showcase with top talent.</p>
+                <button>Reserve Now</button>
+            </div>
+            <div class="featured-card">
+                <span class="badge">🎉</span>
+                <img src="festive1.jpg" alt="Luxe Festival">
+                <h3>Luxe Festival</h3>
+                <p class="event-details">Bangalore | ₹2500 | July 22, 2025</p>
+                <p class="event-description">A vibrant festival of culture and grandeur.</p>
+                <button>Reserve Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Filter -->
+    <section class="timeline" id="timeline">
+        <h2>Refine Your Experience</h2>
+        <div class="timeline-controls">
+            <select id="timeline-city" aria-label="Filter by city">
+                <option value="">Select City</option>
+                <option value="Mumbai">Mumbai</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Bangalore">Bangalore</option>
+            </select>
+            <select id="timeline-category" aria-label="Filter by category">
+                <option value="">Select Category</option>
+                <option value="Music">Music</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Festival">Festival</option>
+            </select>
+            <button class="search-btn" aria-label="Search events">Explore Now</button>
+        </div>
+    </section>
+
+    <!-- Categories Spotlight -->
+    <section class="categories" id="categories">
+        <h2>Discover by Category</h2>
+        <div class="category-grid">
+            <div class="category-card">
+                <span class="badge">🎵</span>
+                <img src="m4.jpg" alt="Music">
+                <h3>Music</h3>
+                <p>Immerse in world-class performances</p>
+                <button data-category="Music">Explore Music</button>
+            </div>
+            <div class="category-card">
+                <span class="badge">😂</span>
+                <img src="c4.jpg" alt="Comedy">
+                <h3>Comedy</h3>
+                <p>Laughter that elevates your evening</p>
+                <button data-category="Comedy">Explore Comedy</button>
+            </div>
+            <div class="category-card">
+                <span class="badge">🎉</span>
+                <img src="festive1.jpg" alt="Festival">
+                <h3>Festival</h3>
+                <p>Celebrate in style and grandeur</p>
+                <button data-category="Festival">Explore Festivals</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Grid -->
+    <section class="events-grid" id="events" role="region" aria-label="Event listings"></section>
+
+    <!-- Event Preview Overlay -->
+    <div class="event-preview" id="event-preview" role="dialog" aria-label="Event preview">
+        <span class="close-preview" aria-label="Close preview">×</span>
+        <h3 id="preview-title"></h3>
+        <p id="preview-details"></p>
+        <p id="preview-description"></p>
+        <button>Reserve Now</button>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="login-modal" id="login-modal">
+        <div class="login-modal-content">
+            <span class="close" aria-label="Close login modal">×</span>
+            <h2>Login to EventSphere</h2>
+            <form id="login-form">
+                <input type="email" placeholder="Email Address" required aria-label="Email address">
+                <input type="password" placeholder="Password" required aria-label="Password">
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div class="modal" id="add-event-modal">
+        <div class="modal-content">
+            <span class="close" aria-label="Close modal">×</span>
+            <h2>Create New Event</h2>
+            <form id="event-form">
+                <input type="text" placeholder="Event Name" required aria-label="Event name">
+                <select required aria-label="Select city">
+                    <option value="">Select City</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Bangalore">Bangalore</option>
+                </select>
+                <select required aria-label="Select category">
+                    <option value="">Select Category</option>
+                    <option value="Music">Music</option>
+                    <option value="Comedy">Comedy</option>
+                    <option value="Festival">Festival</option>
+                </select>
+                <input type="date" required aria-label="Event date">
+                <input type="number" placeholder="Price" required aria-label="Event price">
+                <textarea placeholder="Event Description" required aria-label="Event description"></textarea>
+                <button type="submit">Submit Event</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Testimonials Section (Voices of Elegance) -->
+    <section class="testimonials" id="testimonials">
+        <h2>Voices of Elegance</h2>
+        <div class="testimonial-container">
+            <div class="testimonial-slide" data-index="0">
+                <p>"EventSphere transformed my night into a masterpiece. Seamless and luxurious!"</p>
+                <span>- Ananya K.</span>
+            </div>
+            <div class="testimonial-slide" data-index="1">
+                <p>"The curated events are unparalleled. Found my favorite comedy show effortlessly."</p>
+                <span>- Vikram S.</span>
+            </div>
+            <div class="testimonial-slide" data-index="2">
+                <p>"A platform that exudes class. Every festival I attended was unforgettable!"</p>
+                <span>- Rhea M.</span>
+            </div>
+        </div>
+        <div class="testimonial-nav">
+            <div data-index="0" class="active"></div>
+            <div data-index="1"></div>
+            <div data-index="2"></div>
+        </div>
+    </section>
+
+    <!-- Event Stats Counter -->
+    <section class="event-stats" id="stats">
+        <h2>Our Legacy</h2>
+        <div class="stats-counter">
+            <div><span class="counter" data-target="15000">0</span>+ Events Curated</div>
+            <div><span class="counter" data-target="60">0</span>+ Cities</div>
+            <div><span class="counter" data-target="8000">0</span>+ Delighted Guests</div>
+        </div>
+    </section>
+
+    <!-- Newsletter Signup -->
+    <section class="newsletter" id="newsletter">
+        <h2>Join the Elite</h2>
+        <form id="newsletter-form">
+            <input type="email" placeholder="Enter your email" required aria-label="Email address">
+            <button type="submit">Subscribe</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="company-info">
+            <p>EventSphere © 2025</p>
+            <p>Orchestrating moments of grandeur</p>
+        </div>
+        <div class="quick-links">
+            <a href="#home">Home</a>
+            <a href="#events">Events</a>
+            <a href="#contact">Contact</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
+        <div class="social-icons">
+            <a href="#" aria-label="Facebook">📘</a>
+            <a href="#" aria-label="Twitter">🐦</a>
+            <a href="#" aria-label="Instagram">📸</a>
+            <a href="#" aria-label="LinkedIn">💼</a>
+        </div>
+    </footer>
+
+    <script>
+        // Ensure DOM is fully loaded
+        document.addEventListener("DOMContentLoaded", () => {
+            // Event Data with Images
+            const eventsData = {
+                Mumbai: [
+                    { name: "Symphony Soirée", category: "Music", date: "2025-07-18", price: 2800, badge: "🎵", description: "A night of orchestral brilliance.", city: "Mumbai", image: "m3.jpg" },
+                    { name: "Laugh Luxe", category: "Comedy", date: "2025-07-20", price: 2000, badge: "😂", description: "Elite stand-up comedy showcase.", city: "Mumbai", image: "c2.jpg" },
+                    { name: "Gala of Lights", category: "Festival", date: "2025-07-22", price: 2500, badge: "🎉", description: "A vibrant festival of culture.", city: "Mumbai", image: "festive1.jpg" },
+                    { name: "Jazz Elegance", category: "Music", date: "2025-07-25", price: 2200, badge: "🎵", description: "Sophisticated jazz under the stars.", city: "Mumbai", image: "m5.jpg" },
+                    { name: "Comedy Couture", category: "Comedy", date: "2025-07-28", price: 1800, badge: "😂", description: "High-class improv comedy.", city: "Mumbai", image: "c3.jpg" },
+                    { name: "Artisan Fest", category: "Festival", date: "2025-08-01", price: 2600, badge: "🎉", description: "Art, music, and luxury.", city: "Mumbai", image:"f2.png" },
+                    { name: "Pop Prestige", category: "Music", date: "2025-08-05", price: 2100, badge: "🎵", description: "Vibrant pop concert experience.", city: "Mumbai", image: "m6.jpg" },
+                    { name: "Stand-Up Soirée", category: "Comedy", date: "2025-08-10", price: 1900, badge: "😂", description: "Top-tier comedic talent.", city: "Mumbai", image: "c5.jpg" },
+                    { name: "Wine & Symphony", category: "Festival", date: "2025-08-15", price: 2400, badge: "🎉", description: "Wine tasting with live music.", city: "Mumbai", image:"f3.png" },
+                    { name: "EDM Extravagance", category: "Music", date: "2025-08-20", price: 2700, badge: "🎵", description: "High-energy electronic dance night.", city: "Mumbai", image: "m7.jpg" }
+                ],
+                Delhi: [
+                    { name: "Indie Opulence", category: "Music", date: "2025-07-19", price: 2300, badge: "🎵", description: "Indie music with a luxurious twist.", city: "Delhi", image: "m8.jpg" },
+                    { name: "Comedy Royale", category: "Comedy", date: "2025-07-21", price: 1900, badge: "😂", description: "Regal laughter-filled evening.", city: "Delhi", image: "c6.jpg" },
+                    { name: "Heritage Gala", category: "Festival", date: "2025-07-23", price: 2600, badge: "🎉", description: "Celebrate Delhi’s grandeur.", city: "Delhi", image: "f4.jpg" },
+                    { name: "Acoustic Affair", category: "Music", date: "2025-07-26", price: 2000, badge: "🎵", description: "Intimate acoustic performances.", city: "Delhi", image: "m9.jpeg" },
+                    { name: "Laugh Elite", category: "Comedy", date: "2025-07-29", price: 1700, badge: "😂", description: "Star-studded comedy night.", city: "Delhi", image: "c7.jpg" },
+                    { name: "Gourmet Fest", category: "Festival", date: "2025-08-02", price: 2800, badge: "🎉", description: "Culinary and musical splendor.", city: "Delhi", image: "f6.jpg" },
+                    { name: "Rock Regency", category: "Music", date: "2025-08-07", price: 2400, badge: "🎵", description: "Classic rock with elegance.", city: "Delhi", image: "m10.jpg" },
+                    { name: "Improv Indulgence", category: "Comedy", date: "2025-08-12", price: 1800, badge: "😂", description: "Spontaneous comedy brilliance.", city: "Delhi", image: "c8.jpg" },
+                    { name: "Craft Luxe Fest", category: "Festival", date: "2025-08-17", price: 2300, badge: "🎉", description: "Premium craft beer experience.", city: "Delhi", image: "f7.jpg" },
+                    { name: "Classical Charm", category: "Music", date: "2025-08-22", price: 2500, badge: "🎵", description: "Elegant classical music evening.", city: "Delhi", image: "m3.jpg" }
+                ],
+                Bangalore: [
+                    { name: "Tech Symphony", category: "Music", date: "2025-07-17", price: 2200, badge: "🎵", description: "Tech-inspired musical journey.", city: "Bangalore", image: "m12.jpg" },
+                    { name: "Comedy Prestige", category: "Comedy", date: "2025-07-20", price: 1900, badge: "😂", description: "Elite roast and comedy show.", city: "Bangalore", image: "c9.jpg" },
+                    { name: "Brew Elegance", category: "Festival", date: "2025-07-24", price: 2700, badge: "🎉", description: "Craft brews with live beats.", city: "Bangalore", image: "f8.jpg" },
+                    { name: "Indie Luxe", category: "Music", date: "2025-07-27", price: 2300, badge: "🎵", description: "Showcase of indie elegance.", city: "Bangalore", image: "m13.jpg" },
+                    { name: "Stand-Up Splendor", category: "Comedy", date: "2025-07-30", price: 1700, badge: "😂", description: "Fresh comedic talent.", city: "Bangalore", image: "c10.png" },
+                    { name: "Summer Gala", category: "Festival", date: "2025-08-04", price: 2900, badge: "🎉", description: "Luxurious summer celebration.", city: "Bangalore", image: "f9.jpg" },
+                    { name: "Jazz Opulence", category: "Music", date: "2025-08-09", price: 2400, badge: "🎵", description: "Sophisticated jazz experience.", city: "Bangalore", image: "m14.jpg" },
+                    { name: "Comedy Extravagance", category: "Comedy", date: "2025-08-14", price: 1800, badge: "😂", description: "Improv comedy in style.", city: "Bangalore", image: "c3.jpg" },
+                    { name: "Artisan Gala", category: "Festival", date: "2025-08-19", price: 2600, badge: "🎉", description: "Art and music in grandeur.", city: "Bangalore", image: "f10.jpg" },
+                    { name: "Rock Royalty", category: "Music", date: "2025-08-24", price: 2500, badge: "🎵", description: "Iconic rock performances.", city: "Bangalore", image: "m11.png" }
+                ]
+            };
+
+            // GSAP Animations
+            gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+            // Navbar Animation
+            gsap.from(".navbar", { y: -50, opacity: 0, duration: 1, ease: "power2.out" });
+
+            // Hero Section Animation
+            gsap.from(".hero-content h1", {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                ease: "power2.out",
+                scrollTrigger: { trigger: ".hero", start: "top bottom" }
+            });
+            gsap.from(".hero-content p", {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                delay: 0.2,
+                ease: "power2.out",
+                scrollTrigger: { trigger: ".hero", start: "top bottom" }
+            });
+            gsap.from(".search-bar", {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                delay: 0.4,
+                ease: "power2.out",
+                scrollTrigger: { trigger: ".hero", start: "top bottom" }
+            });
+
+            // Featured Events Animation
+            gsap.from(".featured-events h2", {
+                scrollTrigger: { trigger: ".featured-events", start: "top 80%" },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                ease: "power2.out"
+            });
+
+            gsap.from(".featured-card", {
+                scrollTrigger: { trigger: ".featured-events", start: "top 80%" },
+                opacity: 0,
+                y: 50,
+                stagger: 0.2,
+                duration: 1,
+                ease: "power2.out"
+            });
+
+            // Timeline Animation
+            gsap.from(".timeline h2", {
+                scrollTrigger: { trigger: ".timeline", start: "top 80%" },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                ease: "power2.out"
+            });
+
+            gsap.from(".timeline-controls > *", {
+                scrollTrigger: { trigger: ".timeline", start: "top 80%" },
+                y: 50,
+                opacity: 0,
+                stagger: 0.2,
+                duration: 1,
+                ease: "power2.out"
+            });
+
+            // Categories Animation
+            gsap.from(".categories h2", {
+                scrollTrigger: { trigger: ".categories", start: "top 80%" },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                ease: "power2.out"
+            });
+
+            gsap.from(".category-card", {
+                scrollTrigger: { trigger: ".categories", start: "top 80%" },
+                opacity: 0,
+                stagger: 0.2,
+                duration: 1,
+                ease: "power2.out"
+            });
+
+            // Event Cards Animation
+            function animateCards() {
+                gsap.from(".event-card", {
+                    scrollTrigger: { trigger: ".events-grid", start: "top 80%" },
+                    opacity: 0,
+                    stagger: 0.2,
+                    duration: 1,
+                    ease: "power2.out"
+                });
+            }
+
+            // Testimonials Animation
+            const testimonialSlides = document.querySelectorAll(".testimonial-slide");
+            const testimonialNavs = document.querySelectorAll(".testimonial-nav div");
+            let currentTestimonialSlide = 0;
+
+            function showTestimonialSlide(index) {
+                testimonialSlides.forEach((slide, i) => {
+                    slide.classList.remove("active");
+                    testimonialNavs[i].classList.remove("active");
+                    gsap.set(slide, { opacity: 0, display: "none" });
+                });
+                testimonialSlides[index].classList.add("active");
+                testimonialNavs[index].classList.add("active");
+                gsap.to(testimonialSlides[index], {
+                    opacity: 1,
+                    display: "block",
+                    duration: 0.5,
+                    ease: "power2.inOut"
+                });
+            }
+
+            function nextTestimonialSlide() {
+                currentTestimonialSlide = (currentTestimonialSlide + 1) % testimonialSlides.length;
+                showTestimonialSlide(currentTestimonialSlide);
+                setTimeout(nextTestimonialSlide, 5000);
+            }
+
+            if (testimonialSlides.length > 0) {
+                showTestimonialSlide(currentTestimonialSlide);
+                setTimeout(nextTestimonialSlide, 5000);
+                testimonialNavs.forEach((nav, index) => {
+                    nav.addEventListener("click", () => {
+                        currentTestimonialSlide = index;
+                        showTestimonialSlide(index);
+                    });
+                });
+            }
+
+            // Stats Counter Animation
+            gsap.from(".event-stats h2", {
+                scrollTrigger: { trigger: ".event-stats", start: "top 80%" },
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                ease: "power2.out"
+            });
+
+            gsap.from(".stats-counter div", {
+                scrollTrigger: { trigger: ".event-stats", start: "top 80%" },
+                opacity: 0,
+                stagger: 0.2,
+                duration: 1,
+                ease: "power2.out"
+            });
+
+            document.querySelectorAll(".counter").forEach(counter => {
+                const target = parseInt(counter.dataset.target);
+                gsap.to(counter, {
+                    scrollTrigger: { trigger: ".event-stats", start: "top 80%" },
+                    innerText: target,
+                    duration: 2,
+                    ease: "power2.out",
+                    snap: { innerText: 1 }
+                });
+            });
+
+            // Login Modal Animation
+            const loginModal = document.getElementById("login-modal");
+            const openLoginModal = document.querySelector(".open-login-modal");
+            const closeLoginModal = document.querySelector(".login-modal-content .close");
+            const loginForm = document.getElementById("login-form");
+
+            if (loginModal && openLoginModal && closeLoginModal && loginForm) {
+                openLoginModal.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    loginModal.style.display = "flex";
+                    gsap.fromTo(".login-modal-content", 
+                        { opacity: 0, y: 50 },
+                        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+                    );
+                    loginModal.focus();
+                });
+
+                closeLoginModal.addEventListener("click", () => {
+                    gsap.to(".login-modal-content", {
+                        opacity: 0,
+                        y: 50,
+                        duration: 0.5,
+                        ease: "power2.in",
+                        onComplete: () => {
+                            loginModal.style.display = "none";
+                        }
+                    });
+                });
+
+                loginForm.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    if (loginForm.checkValidity()) {
+                        alert("Login successful!");
+                        gsap.to(".login-modal-content", {
+                            opacity: 0,
+                            y: 50,
+                            duration: 0.5,
+                            ease: "power2.in",
+                            onComplete: () => {
+                                loginModal.style.display = "none";
+                                loginForm.reset();
+                            }
+                        });
+                    } else {
+                        loginForm.reportValidity();
+                    }
+                });
+            } else {
+                console.warn("Login modal elements missing.");
+            }
+
+            // Add Event Modal Animation
+            const modal = document.getElementById("add-event-modal");
+            const openModal = document.querySelectorAll(".open-modal");
+            const closeModal = document.querySelector(".modal-content .close");
+            const eventForm = document.getElementById("event-form");
+
+            if (modal && openModal && closeModal && eventForm) {
+                openModal.forEach(btn => {
+                    btn.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        modal.style.display = "flex";
+                        gsap.fromTo(".modal-content", 
+                            { opacity: 0, y: 50 },
+                            { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+                        );
+                        modal.focus();
+                    });
+                });
+
+                closeModal.addEventListener("click", () => {
+                    gsap.to(".modal-content", {
+                        opacity: 0,
+                        y: 50,
+                        duration: 0.5,
+                        ease: "power2.in",
+                        onComplete: () => {
+                            modal.style.display = "none";
+                        }
+                    });
+                });
+
+                eventForm.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    if (eventForm.checkValidity()) {
+                        alert("Event submitted successfully!");
+                        gsap.to(".modal-content", {
+                            opacity: 0,
+                            y: 50,
+                            duration: 0.5,
+                            ease: "power2.in",
+                            onComplete: () => {
+                                modal.style.display = "none";
+                                eventForm.reset();
+                            }
+                        });
+                    } else {
+                        eventForm.reportValidity();
+                    }
+                });
+            } else {
+                console.warn("Add event modal elements missing.");
+            }
+
+            // Event Preview Overlay
+            const eventPreview = document.getElementById("event-preview");
+            const previewTitle = document.getElementById("preview-title");
+            const previewDetails = document.getElementById("preview-details");
+            const previewDescription = document.getElementById("preview-description");
+            const closePreview = document.querySelector(".close-preview");
+
+            if (eventPreview && previewTitle && previewDetails && previewDescription && closePreview) {
+                function showPreview(event) {
+                    if (!event) return;
+                    previewTitle.textContent = event.name || "Unknown Event";
+                    previewDetails.textContent = `${event.city || "Unknown"} | ₹${event.price || 0} | ${event.date || "Unknown"}`;
+                    previewDescription.textContent = event.description || "No description available.";
+                    eventPreview.style.display = "block";
+                    gsap.fromTo(eventPreview, 
+                        { opacity: 0, y: 50 },
+                        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+                    );
+                    eventPreview.focus();
+                }
+
+                closePreview.addEventListener("click", () => {
+                    gsap.to(eventPreview, {
+                        opacity: 0,
+                        y: 50,
+                        duration: 0.5,
+                        ease: "power2.in",
+                        onComplete: () => {
+                            eventPreview.style.display = "none";
+                        }
+                    });
+                });
+
+                // Add click listeners to featured cards with null checks
+                document.querySelectorAll(".featured-card").forEach(card => {
+                    const titleElement = card.querySelector("h3");
+                    const detailsElement = card.querySelector(".event-details");
+                    const descriptionElement = card.querySelector(".event-description");
+                    const missingElements = [];
+
+                    if (!titleElement) missingElements.push("h3");
+                    if (!detailsElement) missingElements.push(".event-details");
+                    if (!descriptionElement) missingElements.push(".event-description");
+
+                    if (missingElements.length > 0) {
+                        console.warn(`Featured card is missing elements: ${missingElements.join(", ")}`, card);
+                        return;
+                    }
+
+                    const detailsText = detailsElement.textContent;
+                    const detailsParts = detailsText.split(" | ");
+                    
+                    if (detailsParts.length < 3) {
+                        console.warn(`Invalid details format in featured card: "${detailsText}"`, card);
+                        return;
+                    }
+
+                    const event = {
+                        name: titleElement.textContent || "Unknown Event",
+                        city: detailsParts[0] || "Unknown",
+                        price: parseInt(detailsParts[1].replace("₹", "")) || 0,
+                        date: detailsParts[2] || "Unknown",
+                        description: descriptionElement.textContent || "No description available."
+                    };
+
+                    card.addEventListener("click", () => showPreview(event));
+                    card.tabIndex = 0;
+                    card.addEventListener("keydown", (e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            showPreview(event);
+                        }
+                    });
+                });
+            } else {
+                console.warn("Event preview elements missing.");
+            }
+
+            // Dynamic Event Rendering
+            const eventsGrid = document.getElementById("events");
+            const citySearch = document.getElementById("city-search");
+            const categorySearch = document.getElementById("category-search");
+            const timelineCity = document.getElementById("timeline-city");
+            const timelineCategory = document.getElementById("timeline-category");
+            const timelineSearch = document.querySelector(".timeline-controls .search-btn");
+            const categoryButtons = document.querySelectorAll(".category-card button");
+            const exploreNowBtn = document.querySelector(".explore-now-btn");
+
+            function renderEvents(city = "", category = "") {
+                if (!eventsGrid) {
+                    console.warn("Events grid not found.");
+                    return;
+                }
+                eventsGrid.innerHTML = "";
+                const events = city && eventsData[city] ? eventsData[city] : Object.values(eventsData).flat();
+                const filteredEvents = category ? events.filter(event => event.category === category) : events;
+                if (filteredEvents.length === 0) {
+                    eventsGrid.innerHTML = '<p>No events found.</p>';
+                    eventsGrid.classList.add("active");
+                    eventsGrid.setAttribute("aria-label", `No events found for ${city || "all cities"}`);
+                    return;
+                }
+                filteredEvents.forEach(event => {
+                    const card = document.createElement("div");
+                    card.className = "event-card";
+                    card.dataset.city = event.city;
+                    card.dataset.category = event.category;
+                    card.innerHTML = `
+                        <span class="badge">${event.badge}</span>
+                        <img src="${event.image}" alt="${event.name}" loading="lazy">
+                        <h3>${event.name}</h3>
+                        <p>${event.city} | ₹${event.price} | ${event.date}</p>
+                        <p>${event.description}</p>
+                        <button>Reserve Now</button>
+                    `;
+                    card.addEventListener("click", () => showPreview(event));
+                    card.tabIndex = 0;
+                    card.addEventListener("keydown", (e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            showPreview(event);
+                        }
+                    });
+                    eventsGrid.appendChild(card);
+                });
+                eventsGrid.classList.add("active");
+                animateCards();
+                eventsGrid.setAttribute("aria-label", `Event listings for ${city || "all cities"}`);
+                if (typeof gsap.plugins.scrollTo !== "undefined") {
+                    gsap.to(window, {
+                        scrollTo: { y: "#events", offsetY: 70 },
+                        duration: 1,
+                        ease: "power2.inOut"
+                    });
+                } else {
+                    console.warn("GSAP ScrollToPlugin not loaded. Falling back to native scroll.");
+                    document.getElementById("events").scrollIntoView({ behavior: "smooth" });
+                }
+            }
+
+            if (citySearch && categorySearch && timelineCity && timelineCategory && timelineSearch && categoryButtons && exploreNowBtn) {
+                citySearch.addEventListener("change", () => {
+                    if (categorySearch.value || citySearch.value) {
+                        renderEvents(citySearch.value, categorySearch.value);
+                    }
+                });
+                categorySearch.addEventListener("change", () => {
+                    if (categorySearch.value || citySearch.value) {
+                        renderEvents(citySearch.value, categorySearch.value);
+                    }
+                });
+                timelineCity.addEventListener("change", () => {
+                    renderEvents(timelineCity.value, timelineCategory.value);
+                });
+                timelineCategory.addEventListener("change", () => {
+                    renderEvents(timelineCity.value, timelineCategory.value);
+                });
+                timelineSearch.addEventListener("click", () => {
+                    renderEvents(timelineCity.value, timelineCategory.value);
+                });
+                categoryButtons.forEach(button => {
+                    button.addEventListener("click", () => {
+                        categorySearch.value = button.dataset.category;
+                        renderEvents(citySearch.value, categorySearch.value);
+                    });
+                });
+                exploreNowBtn.addEventListener("click", () => {
+                    renderEvents(citySearch.value, categorySearch.value);
+                });
+            } else {
+                console.warn("Event filtering or explore button elements missing.");
+            }
+
+            // Newsletter Form
+            const newsletterForm = document.getElementById("newsletter-form");
+            if (newsletterForm) {
+                newsletterForm.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    if (newsletterForm.checkValidity()) {
+                        alert("Subscribed successfully!");
+                        gsap.to(".newsletter form", {
+                            opacity: 0,
+                            duration: 0.5,
+                            ease: "power2.in",
+                            onComplete: () => {
+                                newsletterForm.reset();
+                                gsap.to(".newsletter form", { opacity: 1, duration: 0.5, ease: "power2.out" });
+                            }
+                        });
+                    } else {
+                        newsletterForm.reportValidity();
+                    }
+                });
+            } else {
+                console.warn("Newsletter form not found.");
+            }
+
+            // Swipe Gestures for Testimonials
+            let touchstartX = 0;
+            let touchendX = 0;
+
+            const testimonialContainer = document.querySelector(".testimonial-container");
+            if (testimonialContainer) {
+                testimonialContainer.addEventListener("touchstart", e => {
+                    touchstartX = e.changedTouches[0].screenX;
+                });
+
+                testimonialContainer.addEventListener("touchend", e => {
+                    touchendX = e.changedTouches[0].screenX;
+                    if (touchendX < touchstartX - 50) {
+                        currentTestimonialSlide = (currentTestimonialSlide + 1) % testimonialSlides.length;
+                        showTestimonialSlide(currentTestimonialSlide);
+                    } else if (touchendX > touchstartX + 50) {
+                        currentTestimonialSlide = (currentTestimonialSlide - 1 + testimonialSlides.length) % testimonialSlides.length;
+                        showTestimonialSlide(currentTestimonialSlide);
+                    }
+                });
+            } else {
+                console.warn("Testimonial container not found.");
+            }
+
+            // Swipe Gestures for Events Grid
+            const eventsGridSwipe = document.querySelector(".events-grid");
+            if (eventsGridSwipe) {
+                eventsGridSwipe.addEventListener("touchstart", e => {
+                    touchstartX = e.changedTouches[0].screenX;
+                });
+
+                eventsGridSwipe.addEventListener("touchend", e => {
+                    touchendX = e.changedTouches[0].screenX;
+                    if (touchendX < touchstartX - 50 || touchendX > touchstartX + 50) {
+                        gsap.to(".event-card", { opacity: 1, stagger: 0.1, duration: 0.5 });
+                    }
+                });
+            } else {
+                console.warn("Events grid not found.");
+            }
+        });
+    </script>
+</body>
+</html>
